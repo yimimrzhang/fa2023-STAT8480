@@ -33,7 +33,17 @@ data %>% filter(!split) %>% skim
 # say, training/validation/test with ratio 70:20:10,
 # while maintaining the stratification of Target 1/0
 
+split = sample.split(data$TargetB, SplitRatio = 0.7) 
+split.valid<-!split
+split.test<-!split
+split2<-sample.split(data$TargetB[!split],SplitRatio = 2/3)
+split.valid <- split.valid %>% replace(.,.==TRUE, split2)
+split.test <- split.test %>% replace(.,.==TRUE, !split2)
 
+
+summary(data$TargetB[split])
+summary(data$TargetB[split.valid])
+summary(data$TargetB[split.test])
 
 ####################################
 ######### Decision Tree ############
